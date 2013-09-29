@@ -74,13 +74,13 @@ if __name__ == '__main__':
 			if len(text) == 2:
 				# at most 2?
 				text_size = font.getsize(text[0])
-
 				x = (image_size[0]/2) - (text_size[0]/2)
-				y = image_size[1] - text_size[1] - 5 # padding
+				y = image_size[1] - (2*text_size[1]) - 5 # padding
 				drawText(draw, x, y, text[0], font)
 
-				x = (image_size[1]/2) - (text_size[1]/2)
-				y -= text_size[1] - 5
+				text_size = font.getsize(text[1])
+				x = (image_size[0]/2) - (text_size[0]/2)
+				y += text_size[1]
 				drawText(draw, x, y, text[1], font)
 			else:
 				text_size = font.getsize(text[0])
