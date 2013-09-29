@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from images2gif import writeGif
 from PIL import Image, ImageFont, ImageDraw
 from numpy import array
