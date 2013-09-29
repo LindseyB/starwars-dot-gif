@@ -11,8 +11,8 @@ import pysrt
 def striptags(data):
 	# I'm a bad person, don't ever do this.
 	# Only okay, because of how basic the tags are.
-    p = re.compile(r'<.*?>')
-    return p.sub('', data)
+	p = re.compile(r'<.*?>')
+	return p.sub('', data)
 
 def drawText(draw, x, y, text, font):
 	# black outline
