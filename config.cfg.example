@@ -1,0 +1,5 @@
+[general]
+vlc_path: /path/to/vlc
+ep4_path: /path/to/episode_4
+ep5_path: /path/to/episode_5
+ep6_path: /path/to/episode_6
