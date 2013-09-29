@@ -4,3 +4,4 @@ __pycache__
 *.pyc
 .DS_Store
 config.cfg
+screencaps/
