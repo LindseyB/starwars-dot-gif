@@ -7,6 +7,11 @@ import os
 import re
 import ConfigParser
 import pysrt
+import random
+
+sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
+                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
+                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
 
 def striptags(data):
 	# I'm a bad person, don't ever do this.
@@ -24,7 +29,7 @@ def drawText(draw, x, y, text, font):
 	# white text
 	draw.text((x, y),text,(255,255,255),font=font)
 
-if __name__ == '__main__':
+def makeGif(source, sub_index):
 	config = ConfigParser.ConfigParser()
 	config.read("config.cfg")
 
@@ -33,7 +38,7 @@ if __name__ == '__main__':
 	vlc_path = config.get("general", "vlc_path")
 
 	# TODO: replace the video path selection with awesome curses UI
-	video_path = config.get("general", "ep4_path")
+	video_path = config.get("general", "ep"+str(source)+"_path")
 	screencap_path = os.path.join(os.path.dirname(__file__), "screencaps")
 
 	# delete the contents of the screencap path
@@ -42,10 +47,7 @@ if __name__ == '__main__':
 		os.remove(os.path.join(screencap_path, file_name))
 
 	# read in the quotes for the selected movie
-	subs = pysrt.open('subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt')
-
-	# TODO: get this index from a quote search
-	sub_index = 1221
+	subs = pysrt.open(sub_files[source])
 
 	start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds
 	end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds
@@ -98,3 +100,7 @@ if __name__ == '__main__':
 
 	print "generating gif..."
 	writeGif(filename, images, nq=10, dither=True)
+
+
+if __name__ == '__main__':
+	makeGif(4, random.randint(0, len(subs)-1))
