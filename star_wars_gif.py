@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import urwid
 import pysrt
 from makeGifs import makeGif
