@@ -37,7 +37,6 @@ def makeGif(source, sub_index):
 
 	vlc_path = config.get("general", "vlc_path")
 
-	# TODO: replace the video path selection with awesome curses UI
 	video_path = config.get("general", "ep"+str(source)+"_path")
 	screencap_path = os.path.join(os.path.dirname(__file__), "screencaps")
 
@@ -57,7 +56,6 @@ def makeGif(source, sub_index):
 	cmd = '"{0}" -Idummy --video-filter scene -V dummy --no-audio --scene-height=256 --scene-width=512 --scene-format=png --scene-ratio=1 --start-time={3} --stop-time={4}  --scene-prefix=thumb --scene-path="{1}"  "{2}" vlc://quit'.format(vlc_path, screencap_path, video_path, start, end)
 	os.popen(cmd)
 
-	# create a fuckin' gif
 	file_names = sorted((fn for fn in os.listdir(screencap_path)))
 	images = []
 
@@ -98,9 +96,11 @@ def makeGif(source, sub_index):
 
 	filename = "star_wars.gif"
 
+	# create a fuckin' gif
 	print "generating gif..."
 	writeGif(filename, images, nq=10, dither=True)
 
 
 if __name__ == '__main__':
-	makeGif(4, random.randint(0, len(subs)-1))
+	# by default we create a random gif
+	makeGif(random.randint(3,5), random.randint(0, len(subs)-1))
