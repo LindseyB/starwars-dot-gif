@@ -106,4 +106,5 @@ def makeGif(source, sub_index, rand=False):
 
 if __name__ == '__main__':
 	# by default we create a random gif
-	makeGif(random.randint(3,5), 0, rand=True)
+	makeGif(random.randint(4,6), 0, rand=True)
+
