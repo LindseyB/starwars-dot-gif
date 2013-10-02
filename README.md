@@ -25,3 +25,6 @@ from makeGifs import makeGif
 # index is the index of the SRT
 makeGif(source, index)
 ```
+
+
+**Note:** If generating gifs is taking too long for you remove ```nq=10``` from the ```writeGif``` call at the sacrifice of quality.
