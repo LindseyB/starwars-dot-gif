@@ -6,6 +6,8 @@ Copy the contents of ```config.cfg.exmaple``` into ```config.cfg``` and make sur
 
 To Run with search UI [(sample run)](http://www.youtube.com/watch?v=n387eBqnw1o):
 
+The gif is always created as **star_wars.gif**
+
 ```
 $ python star_wars_gif.py
 ```
