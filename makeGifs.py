@@ -51,8 +51,10 @@ def makeGif(source, sub_index, rand=False):
 	if rand:
 		sub_index = random.randint(0, len(subs)-1)
 
-	start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds - 1
-	end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds + 1
+	print subs[sub_index].start.milliseconds
+
+	start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds + (0.001*subs[sub_index].start.milliseconds)
+	end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds + (0.001*subs[sub_index].end.milliseconds)
 	text = striptags(subs[sub_index].text).split("\n")
 
 	# tell vlc to go get images for gifs
