@@ -29,7 +29,7 @@ def drawText(draw, x, y, text, font):
 	# white text
 	draw.text((x, y),text,(255,255,255),font=font)
 
-def makeGif(source, sub_index):
+def makeGif(source, sub_index, rand=False):
 	config = ConfigParser.ConfigParser()
 	config.read("config.cfg")
 
@@ -47,6 +47,9 @@ def makeGif(source, sub_index):
 
 	# read in the quotes for the selected movie
 	subs = pysrt.open(sub_files[source])
+
+	if random:
+		sub_index = random.randint(0, len(subs)-1)
 
 	start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds
 	end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds
@@ -103,4 +106,4 @@ def makeGif(source, sub_index):
 
 if __name__ == '__main__':
 	# by default we create a random gif
-	makeGif(random.randint(3,5), random.randint(0, len(subs)-1))
+	makeGif(random.randint(3,5), 0, rand=True)
