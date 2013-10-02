@@ -10,8 +10,8 @@ import pysrt
 import random
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
-                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
-                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
+                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo-2.srt',
+                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo-2.srt' }
 
 def striptags(data):
 	# I'm a bad person, don't ever do this.
@@ -48,7 +48,7 @@ def makeGif(source, sub_index, rand=False):
 	# read in the quotes for the selected movie
 	subs = pysrt.open(sub_files[source])
 
-	if random:
+	if rand:
 		sub_index = random.randint(0, len(subs)-1)
 
 	start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds

@@ -9,8 +9,8 @@ choices = [ { 'name': "Star Wars: A New Hope", 'num': 4 },
             { 'name': "Star Wars: Return of the Jedi", 'num': 6 } ]
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
-                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
-                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
+                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo-2.srt',
+                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo-2.srt' }
 
 source = 0
 index = 0
