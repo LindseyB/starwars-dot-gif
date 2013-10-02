@@ -10,8 +10,8 @@ import pysrt
 import random
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
-                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo-2.srt',
-                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo-2.srt' }
+                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
+                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
 
 def striptags(data):
 	# I'm a bad person, don't ever do this.
