@@ -42,7 +42,14 @@ def search(button):
 def find_quotes(button, edit):
     subs = pysrt.open(sub_files[source])
     search = edit.edit_text.lower()
-    matching = [s for s in subs if search in s.text.lower()]
+
+    def seek(item, quote):
+        for i in item.split(' '):
+            if not i in quote:
+                return False
+        return True
+    matching = [s for s in subs if seek(search, s.text.lower())]
+
     body = [urwid.Text("Select quote"), urwid.Divider()]
     for m in matching:
         button = urwid.Button(m.text)
