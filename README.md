@@ -21,7 +21,7 @@ $ python makeGifs.py
 
 If you want to use ```makeGifs``` elsewhere use:
 
-```
+```python
 from makeGifs import makeGif
 # source should be 4, 5, or 6
 # index is the index of the SRT
