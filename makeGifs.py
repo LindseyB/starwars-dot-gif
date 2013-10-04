@@ -63,7 +63,6 @@ def makeGif(source, sub_index, rand=False):
 	images = []
 
 	font = ImageFont.truetype("fonts/DejaVuSansCondensed-BoldOblique.ttf", 16)
-	image_size = Image.open(os.path.join(screencap_path,file_names[0])).size
 
 	# first capture is always black? maybe?
 	file_names.pop()
@@ -72,6 +71,11 @@ def makeGif(source, sub_index, rand=False):
 		try:
 			image = Image.open(os.path.join(screencap_path,f))
 			draw = ImageDraw.Draw(image)
+
+			try:
+  				image_size
+			except NameError:
+				image_size = image.size
 
 			# deal with multi-line quotes
 			if len(text) == 2:
