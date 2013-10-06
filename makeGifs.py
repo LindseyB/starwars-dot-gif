@@ -29,7 +29,7 @@ def drawText(draw, x, y, text, font):
 	# white text
 	draw.text((x, y),text,(255,255,255),font=font)
 
-def makeGif(source, sub_index, rand=False):
+def makeGif(source, sub_index, rand=False, no_quote=False):
 	config = ConfigParser.ConfigParser()
 	config.read("config.cfg")
 
@@ -51,9 +51,14 @@ def makeGif(source, sub_index, rand=False):
 	if rand:
 		sub_index = random.randint(0, len(subs)-1)
 
-	start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds + (0.001*subs[sub_index].start.milliseconds)
-	end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds + (0.001*subs[sub_index].end.milliseconds)
-	text = striptags(subs[sub_index].text).split("\n")
+	if no_quote:
+		start = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds + (0.001*subs[sub_index].end.milliseconds)
+		end = (3600 * subs[sub_index+1].start.hours) + (60 * subs[sub_index+1].start.minutes) + subs[sub_index+1].start.seconds + (0.001*subs[sub_index+1].start.milliseconds)
+	else:
+		start = (3600 * subs[sub_index].start.hours) + (60 * subs[sub_index].start.minutes) + subs[sub_index].start.seconds + (0.001*subs[sub_index].start.milliseconds)
+		end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds + (0.001*subs[sub_index].end.milliseconds)
+		text = striptags(subs[sub_index].text).split("\n")
+
 
 	# tell vlc to go get images for gifs
 	cmd = '"{0}" -Idummy --video-filter scene -V dummy --no-audio --scene-height=256 --scene-width=512 --scene-format=png --scene-ratio=1 --start-time={3} --stop-time={4}  --scene-prefix=thumb --scene-path="{1}"  "{2}" vlc://quit'.format(vlc_path, screencap_path, video_path, start, end)
@@ -78,22 +83,26 @@ def makeGif(source, sub_index, rand=False):
 				image_size = image.size
 
 			# deal with multi-line quotes
-			if len(text) == 2:
-				# at most 2?
-				text_size = font.getsize(text[0])
-				x = (image_size[0]/2) - (text_size[0]/2)
-				y = image_size[1] - (2*text_size[1]) - 5 # padding
-				drawText(draw, x, y, text[0], font)
+			try:
+				if len(text) == 2:
+					# at most 2?
+					text_size = font.getsize(text[0])
+					x = (image_size[0]/2) - (text_size[0]/2)
+					y = image_size[1] - (2*text_size[1]) - 5 # padding
+					drawText(draw, x, y, text[0], font)
 
-				text_size = font.getsize(text[1])
-				x = (image_size[0]/2) - (text_size[0]/2)
-				y += text_size[1]
-				drawText(draw, x, y, text[1], font)
-			else:
-				text_size = font.getsize(text[0])
-				x = (image_size[0]/2) - (text_size[0]/2)
-				y = image_size[1] - text_size[1] - 5 # padding
-				drawText(draw, x, y, text[0], font)
+					text_size = font.getsize(text[1])
+					x = (image_size[0]/2) - (text_size[0]/2)
+					y += text_size[1]
+					drawText(draw, x, y, text[1], font)
+				else:
+					text_size = font.getsize(text[0])
+					x = (image_size[0]/2) - (text_size[0]/2)
+					y = image_size[1] - text_size[1] - 5 # padding
+					drawText(draw, x, y, text[0], font)
+			except NameError:
+				pass
+				# do nothing.
 
 			# add it to the array
 			images.append(array(image))
@@ -110,5 +119,5 @@ def makeGif(source, sub_index, rand=False):
 
 if __name__ == '__main__':
 	# by default we create a random gif
-	makeGif(random.randint(4,6), 0, rand=True)
+	makeGif(random.randint(4,6), 0, rand=True, no_quote=bool(random.getrandbits(1)))
 
