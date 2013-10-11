@@ -116,6 +116,12 @@ def makeGif(source, sub_index, rand=False, no_quote=False):
 	print "generating gif..."
 	writeGif(filename, images, nq=10, dither=True)
 
+	if rand:
+		try:
+			return text
+		except:
+			return []
+
 
 if __name__ == '__main__':
 	# by default we create a random gif

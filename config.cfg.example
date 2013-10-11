@@ -3,3 +3,11 @@ vlc_path: /path/to/vlc
 ep4_path: /path/to/episode_4
 ep5_path: /path/to/episode_5
 ep6_path: /path/to/episode_6
+[imgur]
+client_id: imgur_client_id
+api_key: imgur_client_secret
+[twitter]
+app_key: twitter_app_key
+app_secret: twitter_app_secret
+oauth_token: twitter_oauth_token
+oauth_token_secret: twitter_oauth_token_secret
