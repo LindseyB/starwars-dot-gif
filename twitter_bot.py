@@ -28,8 +28,9 @@ no_quote = bool(random.getrandbits(1))
 quote = makeGif(random.randint(4,6), 0, rand=True, no_quote=no_quote)
 quote = ' '.join(quote)
 
-# todo: do maths to figure out the size 
-os.popen('convert star_wars.gif -resize 50% star_wars.gif')
+# resize the gif in 90% increments, automatically trying to get the precent was not working. :(
+while(os.path.getsize('star_wars.gif') > 2097152):
+	os.popen('convert star_wars.gif -resize 90% star_wars.gif')
 
 response = requests.post(
     url, 
