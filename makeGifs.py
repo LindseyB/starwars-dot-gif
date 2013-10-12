@@ -69,9 +69,6 @@ def makeGif(source, sub_index, rand=False, no_quote=False):
 
 	font = ImageFont.truetype("fonts/DejaVuSansCondensed-BoldOblique.ttf", 16)
 
-	# first capture is always black? maybe?
-	file_names.pop()
-
 	for f in file_names:
 		try:
 			image = Image.open(os.path.join(screencap_path,f))
@@ -104,9 +101,13 @@ def makeGif(source, sub_index, rand=False, no_quote=False):
 				pass
 				# do nothing.
 
-			# add it to the array
-			images.append(array(image))
-			print 'image appended.'
+			# if not all black?
+			if image.getbbox():
+				# add it to the array
+				images.append(array(image))
+				print 'image appended.'
+			else:
+				print 'all black frame found.'
 		except IOError:
 			print 'empty frame found.'
 
