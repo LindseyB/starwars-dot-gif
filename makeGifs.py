@@ -69,6 +69,9 @@ def makeGif(source, sub_index, rand=False, no_quote=False):
 
 	font = ImageFont.truetype("fonts/DejaVuSansCondensed-BoldOblique.ttf", 16)
 
+	# remove the first image from the list
+	file_names.pop(0)
+
 	for f in file_names:
 		try:
 			image = Image.open(os.path.join(screencap_path,f))
@@ -112,6 +115,7 @@ def makeGif(source, sub_index, rand=False, no_quote=False):
 			print 'empty frame found.'
 
 	filename = "star_wars.gif"
+
 
 	# create a fuckin' gif
 	print "generating gif..."
