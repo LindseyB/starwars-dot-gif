@@ -59,5 +59,5 @@ while True:
 	twitter.update_status(status=status)
 
 	print "sleeping..."
-	# sleep 15 minutes
-	time.sleep(900)
+	# sleep 1 hour
+	time.sleep(3600)
