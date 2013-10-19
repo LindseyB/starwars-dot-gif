@@ -25,39 +25,45 @@ headers = {"Authorization": "Client-ID " + CLIENT_ID}
 url = "https://api.imgur.com/3/upload.json"
 
 while True:
-	no_quote = bool(random.getrandbits(1))
-	quote = makeGif(random.randint(4,6), 0, rand=True, no_quote=no_quote)
+	quote = makeGif(random.randint(4,6), 0, rand=True)
 	quote = ' '.join(quote)
 
 	# resize the gif in 90% increments, automatically trying to get the precent was not working. :(
 	while(os.path.getsize('star_wars.gif') > 2097152):
 		os.popen('convert star_wars.gif -resize 90% star_wars.gif')
 
-	response = requests.post(
-	    url,
-	    headers = headers,
-	    data = {
-	        'key': API_KEY,
-	        'image': b64encode(open('star_wars.gif', 'rb').read()),
-	        'type': 'base64',
-	        'name': 'star_wars.gif',
-	        'title': 'Star Wars Dot Gif'
-	    }
-	)
+	try: 
+		response = requests.post(
+			url, 
+			headers = headers,
+			data = {
+				'key': API_KEY, 
+				'image': b64encode(open('star_wars.gif', 'rb').read()),
+				'type': 'base64',
+				'name': 'star_wars.gif',
+				'title': 'Star Wars Dot Gif'
+			}
+		)
+	except requests.exceptions.ConnectionError:
+		# try again.
+		continue
 
-	res_json = response.json()
-	link = res_json['data']['link']
+
+	try:
+		res_json = response.json()
+		link = res_json['data']['link']
+	except ValueError:
+		# try again.
+		continue
 
 	twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
-	if no_quote:
-		status = link + ' #starwarsgif'
-	else:
-		status = '"' + quote + '" ' + link + ' #starwarsgif'
+
+	status = '"' + quote + '" ' + link + ' #starwarsgif'
 
 	print "tweeting..."
 	twitter.update_status(status=status)
 
 	print "sleeping..."
-	# sleep 15 minutes
-	time.sleep(1800)
+	# sleep 1 hour
+	time.sleep(3600)
