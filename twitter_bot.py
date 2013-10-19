@@ -34,10 +34,10 @@ while True:
 		os.popen('convert star_wars.gif -resize 90% star_wars.gif')
 
 	response = requests.post(
-	    url, 
+	    url,
 	    headers = headers,
 	    data = {
-	        'key': API_KEY, 
+	        'key': API_KEY,
 	        'image': b64encode(open('star_wars.gif', 'rb').read()),
 	        'type': 'base64',
 	        'name': 'star_wars.gif',
@@ -60,4 +60,4 @@ while True:
 
 	print "sleeping..."
 	# sleep 15 minutes
-	time.sleep(900)
+	time.sleep(1800)

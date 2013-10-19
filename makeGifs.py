@@ -29,7 +29,7 @@ def drawText(draw, x, y, text, font):
 	# white text
 	draw.text((x, y),text,(255,255,255),font=font)
 
-def makeGif(source, sub_index, rand=False, no_quote=False):
+def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle=""):
 	config = ConfigParser.ConfigParser()
 	config.read("config.cfg")
 
@@ -59,6 +59,8 @@ def makeGif(source, sub_index, rand=False, no_quote=False):
 		end = (3600 * subs[sub_index].end.hours) + (60 * subs[sub_index].end.minutes) + subs[sub_index].end.seconds + (0.001*subs[sub_index].end.milliseconds)
 		text = striptags(subs[sub_index].text).split("\n")
 
+	if len(custom_subtitle) > 0:
+		text = [custom_subtitle]
 
 	# tell vlc to go get images for gifs
 	cmd = '"{0}" -Idummy --video-filter scene -V dummy --no-audio --scene-height=256 --scene-width=512 --scene-format=png --scene-ratio=1 --start-time={3} --stop-time={4}  --scene-prefix=thumb --scene-path="{1}"  "{2}" vlc://quit'.format(vlc_path, screencap_path, video_path, start, end)

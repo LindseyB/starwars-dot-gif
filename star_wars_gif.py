@@ -14,6 +14,7 @@ sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
 
 source = 0
 index = 0
+subtitle = ""
 
 def menu(title, choices):
     body = [urwid.Text(title), urwid.Divider()]
@@ -53,16 +54,35 @@ def find_quotes(button, edit):
     body = [urwid.Text("Select quote"), urwid.Divider()]
     for m in matching:
         button = urwid.Button(m.text)
-        urwid.connect_signal(button, 'click', generate_gif, subs.index(m))
+        urwid.connect_signal(button, 'click', add_custom_subtitle, subs.index(m))
         body.append(urwid.AttrMap(button, None, focus_map='reversed'))
     main.original_widget = urwid.ListBox(urwid.SimpleFocusListWalker(body))
 
-def generate_gif(button, i):
+def add_custom_subtitle(button, i):
     global index
     index = i
+    body = [urwid.Text("Add a custom quote?"), urwid.Divider()]
+    yes_button = urwid.Button("Yes")
+    urwid.connect_signal(yes_button, 'click', enter_custom_subtitle)
+    body.append(urwid.AttrMap(yes_button, None, focus_map='reversed'))
+    no_button = urwid.Button("No")
+    urwid.connect_signal(no_button, 'click', generate_gif)
+    body.append(urwid.AttrMap(no_button, None, focus_map='reversed'))
+    main.original_widget = urwid.ListBox(urwid.SimpleFocusListWalker(body))
+
+def enter_custom_subtitle(button):
+    subtitle = urwid.Edit("Enter custom subtitle: ")
+    done = urwid.Button(u'Submit')
+    urwid.connect_signal(done, 'click', generate_gif_with_subtitle, subtitle)
+    main.original_widget = urwid.Filler(urwid.Pile([subtitle,
+        urwid.AttrMap(done, None, focus_map='reversed')]))
+
+def generate_gif(button):
     raise urwid.ExitMainLoop()
 
-def exit_program(button):
+def generate_gif_with_subtitle(button, edit):
+    global subtitle
+    subtitle = edit.edit_text
     raise urwid.ExitMainLoop()
 
 main = urwid.Padding(menu(u'Movie choice', choices), left=2, right=2)
@@ -71,4 +91,4 @@ top = urwid.Overlay(main, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
     valign='middle', height=('relative', 60),
     min_width=20, min_height=9)
 urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
-makeGif(source, index)
+makeGif(source, index, custom_subtitle=subtitle)
