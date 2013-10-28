@@ -63,7 +63,31 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle=""):
 		text = [custom_subtitle]
 
 	# tell vlc to go get images for gifs
-	cmd = '"{0}" -Idummy --video-filter scene -V dummy --no-audio --scene-height=256 --scene-width=512 --scene-format=png --scene-ratio=1 --start-time={3} --stop-time={4}  --scene-prefix=thumb --scene-path="{1}"  "{2}" vlc://quit'.format(vlc_path, screencap_path, video_path, start, end)
+	cmd = " ".join([
+		'"{vlc_path}"',
+		'-Idummy',
+		'--video-filter',
+		'scene',
+		'-V',
+		'dummy',
+		'--no-audio',
+		'--scene-height=256',
+		'--scene-width=512',
+		'--scene-format=png',
+		'--scene-ratio=1',
+		'--start-time={start}',
+		'--stop-time={end}',
+		'--scene-prefix=thumb',
+		'--scene-path="{screencap_path}"',
+		'"{video_path}"',
+		'vlc://quit'
+	]).format(**{
+		"vlc_path": vlc_path,
+		"start": start,
+		"end": end,
+		"screencap_path": screencap_path,
+		"video_path": video_path
+	})
 	os.popen(cmd)
 
 	file_names = sorted((fn for fn in os.listdir(screencap_path)))
