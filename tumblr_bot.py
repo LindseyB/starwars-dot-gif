@@ -32,7 +32,7 @@ while True:
 
 	photo = open('star_wars.gif', 'rb')
 
-	post = t.post('post', blog_url='http://starwarsgifsasaservice.tumblr.com', params={'type':'photo', 'caption': quote, 'data': photo})
+	post = t.post('post', blog_url='http://starwarsgifsasaservice.tumblr.com', params={'type':'photo', 'caption': quote, 'data': photo, 'tags': 'star wars, gif'})
 
 	print "sleeping..."
 	# sleep 12 hours
