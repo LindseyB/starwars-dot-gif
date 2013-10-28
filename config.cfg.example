@@ -11,3 +11,8 @@ app_key: twitter_app_key
 app_secret: twitter_app_secret
 oauth_token: twitter_oauth_token
 oauth_token_secret: twitter_oauth_token_secret
+[tumblr]
+consumer_key: tumblr_consumer_key
+consumer_secret: tumblr_consumer_secret
+oauth_token: tumblr_oauth_token
+oauth_token_secret: tumblr_oauth_token_secret
