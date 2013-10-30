@@ -1,0 +1,4 @@
+urwid
+pysrt
+numpy
+pil
