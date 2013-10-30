@@ -2,7 +2,7 @@ Star Wars DOT Gif
 -------------
 
 ### To Use
-Copy the contents of ```config.cfg.exmaple``` into ```config.cfg``` and make sure to change the paths for VLC and the Star Wars episodes. Any format that can be read by VLC should be acceptable for the movies. Note, if you don't plan on running the twitter bot you only need to fill out the general section of the cfg file. 
+Copy the contents of ```config.cfg.example``` into ```config.cfg``` and make sure to change the paths for VLC and the Star Wars episodes. Any format that can be read by VLC should be acceptable for the movies. Note, if you don't plan on running the twitter bot you only need to fill out the general section of the cfg file. 
 
 To Run with search UI [(sample run)](http://www.youtube.com/watch?v=n387eBqnw1o):
 
