@@ -29,9 +29,15 @@ while True:
 	quote = makeGif(random.randint(4,6), 0, rand=True)
 	quote = ' '.join(quote)
 
-	# resize the gif in 90% increments, automatically trying to get the precent was not working. :(
 	while(os.path.getsize('star_wars.gif') > 2097152):
-		subprocess.call(['convert', 'star_wars.gif', '-resize', '90%', 'star_wars.gif'])
+		subprocess.call(['convert',
+						'star_wars.gif',
+						'-resize',
+						'90%',
+						'-coalesce',
+						'-layers',
+						'optimize',
+						'star_wars.gif'])
 
 	try:
 		response = requests.post(
