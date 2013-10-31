@@ -2,6 +2,7 @@ import random
 import os
 import ConfigParser
 import time
+import subprocess
 
 from tumblpy import Tumblpy
 from makeGifs import makeGif
@@ -17,10 +18,10 @@ OAUTH_TOKEN_SECRET = config.get("tumblr", "oauth_token_secret")
 
 
 t = Tumblpy(
-    CONSUMER_KEY,
-    CONSUMER_SECRET,
-    OAUTH_TOKEN,
-    OAUTH_TOKEN_SECRET,
+	CONSUMER_KEY,
+	CONSUMER_SECRET,
+	OAUTH_TOKEN,
+	OAUTH_TOKEN_SECRET,
 )
 
 while True:
@@ -28,7 +29,7 @@ while True:
 	quote = ' '.join(quote)
 
 	while(os.path.getsize('star_wars.gif') > 1048576):
-		os.popen('convert star_wars.gif -resize 90% star_wars.gif')
+		subprocess.call(['convert', 'star_wars.gif', '-resize', '90%', 'star_wars.gif'])
 
 	photo = open('star_wars.gif', 'rb')
 

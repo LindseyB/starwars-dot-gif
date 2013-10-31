@@ -8,10 +8,11 @@ import re
 import ConfigParser
 import pysrt
 import random
+import subprocess
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
-                5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
-                6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
+				5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
+				6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
 
 def striptags(data):
 	# I'm a bad person, don't ever do this.
@@ -63,32 +64,23 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle=""):
 		text = [custom_subtitle]
 
 	# tell vlc to go get images for gifs
-	cmd = " ".join([
-		'"{vlc_path}"',
-		'-Idummy',
-		'--video-filter',
-		'scene',
-		'-V',
-		'dummy',
-		'--no-audio',
-		'--scene-height=256',
-		'--scene-width=512',
-		'--scene-format=png',
-		'--scene-ratio=1',
-		'--start-time={start}',
-		'--stop-time={end}',
-		'--scene-prefix=thumb',
-		'--scene-path="{screencap_path}"',
-		'"{video_path}"',
-		'vlc://quit'
-	]).format(**{
-		"vlc_path": vlc_path,
-		"start": start,
-		"end": end,
-		"screencap_path": screencap_path,
-		"video_path": video_path
-	})
-	os.popen(cmd)
+	subprocess.call([vlc_path,
+					'-Idummy',
+					'--video-filter',
+					'scene',
+					'-Vdummy',
+					'--no-audio',
+					'--scene-height=256',
+					'--scene-width=512',
+					'--scene-format=png',
+					'--scene-ratio=1',
+					'--start-time='+str(start),
+					'--stop-time='+str(end),
+					'--scene-prefix=thumb',
+					'--scene-path='+screencap_path,
+					video_path,
+					'vlc://quit'
+					])
 
 	file_names = sorted((fn for fn in os.listdir(screencap_path)))
 	images = []
@@ -104,7 +96,7 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle=""):
 			draw = ImageDraw.Draw(image)
 
 			try:
-  				image_size
+				image_size
 			except NameError:
 				image_size = image.size
 

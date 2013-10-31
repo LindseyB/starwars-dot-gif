@@ -5,6 +5,7 @@ import ConfigParser
 import random
 import os
 import time
+import subprocess
 
 from twython import Twython
 from base64 import b64encode
@@ -30,14 +31,14 @@ while True:
 
 	# resize the gif in 90% increments, automatically trying to get the precent was not working. :(
 	while(os.path.getsize('star_wars.gif') > 2097152):
-		os.popen('convert star_wars.gif -resize 90% star_wars.gif')
+		subprocess.call(['convert', 'star_wars.gif', '-resize', '90%', 'star_wars.gif'])
 
-	try: 
+	try:
 		response = requests.post(
-			url, 
+			url,
 			headers = headers,
 			data = {
-				'key': API_KEY, 
+				'key': API_KEY,
 				'image': b64encode(open('star_wars.gif', 'rb').read()),
 				'type': 'base64',
 				'name': 'star_wars.gif',
