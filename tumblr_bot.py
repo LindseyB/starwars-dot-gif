@@ -37,7 +37,6 @@ while True:
 						'-layers',
 						'optimize',
 						'star_wars.gif'])
-	exit()
 
 	photo = open('star_wars.gif', 'rb')
 
