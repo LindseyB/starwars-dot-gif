@@ -25,7 +25,7 @@ t = Tumblpy(
 )
 
 while True:
-	quote = makeGif(random.randint(4,6), 0, rand=True)
+	quote = makeGif(random.randint(4,6), 0, rand=True, frames=20)
 	quote = ' '.join(quote)
 
 	while(os.path.getsize('star_wars.gif') > 1048576):
@@ -37,6 +37,7 @@ while True:
 						'-layers',
 						'optimize',
 						'star_wars.gif'])
+	exit()
 
 	photo = open('star_wars.gif', 'rb')
 

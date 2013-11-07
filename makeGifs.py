@@ -30,7 +30,7 @@ def drawText(draw, x, y, text, font):
 	# white text
 	draw.text((x, y),text,(255,255,255),font=font)
 
-def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle=""):
+def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", frames=0):
 	config = ConfigParser.ConfigParser()
 	config.read("config.cfg")
 
@@ -127,6 +127,10 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle=""):
 				# add it to the array
 				images.append(array(image))
 				print 'image appended.'
+
+				if frames != 0 and len(images) == frames:
+					# got all the frames we need - all done
+					break
 			else:
 				print 'all black frame found.'
 		except IOError:
