@@ -28,6 +28,14 @@ while True:
 	quote = makeGif(random.randint(4,6), 0, rand=True, frames=20)
 	quote = ' '.join(quote)
 
+	# reduce amount of colors, because tumblr sucks
+	subprocess.call(['convert',
+					'star_wars.gif',
+					'-layers',
+					'Optimize',
+					'-colors',
+					'64',
+					'star_wars.gif'])
 	while(os.path.getsize('star_wars.gif') > 1048576):
 		subprocess.call(['convert',
 						'star_wars.gif',
@@ -35,7 +43,7 @@ while True:
 						'90%',
 						'-coalesce',
 						'-layers',
-						'optimize',
+						'Optimize',
 						'star_wars.gif'])
 
 	photo = open('star_wars.gif', 'rb')

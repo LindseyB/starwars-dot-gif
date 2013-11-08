@@ -29,6 +29,17 @@ while True:
 	quote = makeGif(random.randint(4,6), 0, rand=True)
 	quote = ' '.join(quote)
 
+	# first pass reduce the amount of colors
+	if(os.path.getsize('star_wars.gif') > 2097152):
+		subprocess.call(['convert',
+						'star_wars.gif',
+						'-layers',
+						'Optimize',
+						'-colors',
+						'64',
+						'star_wars.gif'])
+
+	# other passes reduce the size
 	while(os.path.getsize('star_wars.gif') > 2097152):
 		subprocess.call(['convert',
 						'star_wars.gif',
