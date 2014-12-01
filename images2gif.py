@@ -66,7 +66,6 @@ Usefull links
 # todo: This module should be part of imageio (or at least based on)
 
 import os, time
-from IPython import embed
 
 try:
     import PIL
@@ -417,7 +416,6 @@ class GifWriter:
         
         # Select most-used palette as the global one (or first in case no max)
         globalPalette = palettes[ occur.index(max(occur)) ]
-        embed()
         
         # Init
         frames = 0
