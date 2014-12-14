@@ -9,6 +9,7 @@ import ConfigParser
 import pysrt
 import random
 import subprocess
+import argparse
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
 				5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
@@ -30,7 +31,7 @@ def drawText(draw, x, y, text, font):
 	# white text
 	draw.text((x, y),text,(255,255,255),font=font)
 
-def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", frames=0):
+def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", frames=0, filename="star_wars.gif"):
 	config = ConfigParser.ConfigParser()
 	config.read("config.cfg")
 
@@ -136,8 +137,6 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", f
 		except IOError:
 			print 'empty frame found.'
 
-	filename = "star_wars.gif"
-
 
 	# create a fuckin' gif
 	print "generating gif..."
@@ -151,6 +150,31 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", f
 
 
 if __name__ == '__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--episodes', type=int, metavar="EPISODE", nargs='*', default=[4,5,6],
+						help='episode numbers, space-separated (default: 4 5 6)')
+
+	group = parser.add_mutually_exclusive_group()
+	group.add_argument('--random', dest='index', action='store_false',
+						help='use a random subtitle index (default behaviour)')
+	group.add_argument('--index', dest='index', type=int, nargs='?', default=0,
+						help='subtitle index (starts at 1)')
+	parser.set_defaults(index=False)
+
+	group = parser.add_mutually_exclusive_group()
+	group.add_argument('--quote', dest='no_quote', action='store_false')
+	group.add_argument('--no-quote', dest='no_quote', action='store_true')
+	parser.set_defaults(no_quote=-1)
+
+	parser.add_argument('--filename', type=str, nargs='?', default="star_wars.gif",
+						help='filename for the GIF (default: star_wars.gif)')
+
+	args = parser.parse_args()
+
+	random_index = (args.index == False)
+	sub_index = (args.index - 1) if not random_index else 0
+	no_quote = args.no_quote if args.no_quote != -1 else bool(random.getrandbits(1))
+
 	# by default we create a random gif
-	makeGif(random.randint(4,6), 0, rand=True, no_quote=bool(random.getrandbits(1)))
+	makeGif(random.choice(args.episodes), sub_index=sub_index, rand=random_index, no_quote=no_quote, filename=args.filename)
 
