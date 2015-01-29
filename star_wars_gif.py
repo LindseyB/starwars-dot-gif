@@ -61,7 +61,7 @@ def find_quotes(button, edit):
 		urwid.connect_signal(button, 'click', add_custom_subtitle, subs.index(m))
 		body.append(urwid.AttrMap(button, None, focus_map='reversed'))
 
-        back_button = urwid.Button('Go Back')
+        back_button = urwid.Button('Go back')
         urwid.connect_signal(back_button, 'click', search)
         body.append(urwid.AttrMap(back_button, None, focus_map='reversed'))
 	main.original_widget = urwid.ListBox(urwid.SimpleFocusListWalker(body))
