@@ -6,6 +6,12 @@ Copy the contents of ```config.cfg.example``` into ```config.cfg``` and make sur
 
 To Run with search UI [(sample run)](http://www.youtube.com/watch?v=n387eBqnw1o):
 
+Install requirements:
+
+```
+$ pip install -r requirements.txt
+```
+
 The gif is always created as **star_wars.gif**
 
 ```
