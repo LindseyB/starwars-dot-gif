@@ -42,20 +42,25 @@ def search(button):
 
 def find_quotes(button, edit):
 	subs = pysrt.open(sub_files[source])
-	search = edit.edit_text.lower()
+	search_quote = edit.edit_text.lower()
 
 	def seek(item, quote):
 		for i in item.split(' '):
 			if not i in quote:
 				return False
 		return True
-	matching = [s for s in subs if seek(search, s.text.lower())]
-
-	body = [urwid.Text("Select quote"), urwid.Divider()]
+	matching = [s for s in subs if seek(search_quote, s.text.lower())]
+	
+	body_text = "Select quote" if len(matching) > 0 else "No quotes found"
+	body = [urwid.Text(body_text), urwid.Divider()]
 	for m in matching:
 		button = urwid.Button(m.text)
 		urwid.connect_signal(button, 'click', add_custom_subtitle, subs.index(m))
 		body.append(urwid.AttrMap(button, None, focus_map='reversed'))
+
+        back_button = urwid.Button('Go Back')
+        urwid.connect_signal(back_button, 'click', search)
+        body.append(urwid.AttrMap(back_button, None, focus_map='reversed'))
 	main.original_widget = urwid.ListBox(urwid.SimpleFocusListWalker(body))
 
 def add_custom_subtitle(button, i):
