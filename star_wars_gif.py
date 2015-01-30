@@ -37,25 +37,33 @@ def search(button):
 	edit = urwid.Edit("Search quotes: ")
 	done = urwid.Button(u'Search')
 	urwid.connect_signal(done, 'click', find_quotes, edit)
+	exit_button = urwid.Button(u'Exit')
+	urwid.connect_signal(exit_button, 'click', exit)
 	main.original_widget = urwid.Filler(urwid.Pile([edit,
-		urwid.AttrMap(done, None, focus_map='reversed')]))
+		urwid.AttrMap(done, None, focus_map='reversed'),
+		urwid.AttrMap(exit_button, None, focus_map='reversed')]))
 
 def find_quotes(button, edit):
 	subs = pysrt.open(sub_files[source])
-	search = edit.edit_text.lower()
+	search_text = edit.edit_text.lower()
 
 	def seek(item, quote):
 		for i in item.split(' '):
 			if not i in quote:
 				return False
 		return True
-	matching = [s for s in subs if seek(search, s.text.lower())]
-
-	body = [urwid.Text("Select quote"), urwid.Divider()]
+	matching = [s for s in subs if seek(search_text, s.text.lower())]
+	
+	body_text = "Select quote" if len(matching) > 0 else "No quotes found"
+	body = [urwid.Text(body_text), urwid.Divider()]
 	for m in matching:
 		button = urwid.Button(m.text)
 		urwid.connect_signal(button, 'click', add_custom_subtitle, subs.index(m))
 		body.append(urwid.AttrMap(button, None, focus_map='reversed'))
+
+	back_button = urwid.Button('Go back')
+	urwid.connect_signal(back_button, 'click', search)
+	body.append(urwid.AttrMap(back_button, None, focus_map='reversed'))
 	main.original_widget = urwid.ListBox(urwid.SimpleFocusListWalker(body))
 
 def add_custom_subtitle(button, i):
@@ -85,10 +93,15 @@ def generate_gif_with_subtitle(button, edit):
 	subtitle = edit.edit_text
 	raise urwid.ExitMainLoop()
 
+def exit(button):
+	index = None
+	raise urwid.ExitMainLoop()
+
 main = urwid.Padding(menu(u'Movie choice', choices), left=2, right=2)
 top = urwid.Overlay(main, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
 	align='center', width=('relative', 60),
 	valign='middle', height=('relative', 60),
 	min_width=20, min_height=9)
 urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
-makeGif(source, index, custom_subtitle=subtitle)
+if index:
+	makeGif(source, index, custom_subtitle=subtitle)
