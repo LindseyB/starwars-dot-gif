@@ -91,6 +91,13 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", f
 	# remove the first image from the list
 	file_names.pop(0)
 
+	# remove every other image for smoother playback
+	for i, f in enumerate(file_names):
+		if(i%2 == 0):
+			os.remove(os.path.join(screencap_path,f))
+			file_names.pop(i)
+
+
 	for f in file_names:
 		try:
 			image = Image.open(os.path.join(screencap_path,f))
