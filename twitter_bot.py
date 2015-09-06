@@ -86,11 +86,15 @@ while True:
 
 	twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
+	# upload media
+	gif = open('star_wars.gif', 'rb')
+	response = twitter.upload_media(media=gif)
+
 
 	status = '"' + quote + '" ' + link + ' #starwarsgif'
 
 	print "tweeting..."
-	twitter.update_status(status=status)
+	twitter.update_status(status=status, media_ids=[response['media_id']])
 
 	print "sleeping..."
 	# sleep 1 hour
