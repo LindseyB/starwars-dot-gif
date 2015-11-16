@@ -91,6 +91,7 @@ while True:
 	response = twitter.upload_media(media=gif)
 
 
+	quote = (quote[:97] + '...') if len(quote) > 100
 	status = '"' + quote + '" ' + link + ' #starwarsgif'
 
 	print "tweeting..."
