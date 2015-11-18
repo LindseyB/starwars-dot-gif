@@ -26,7 +26,7 @@ headers = {"Authorization": "Client-ID " + CLIENT_ID}
 url = "https://api.imgur.com/3/upload.json"
 
 while True:
-	quote = makeGif(random.randint(4,6), 0, rand=True)
+	quote = makeGif(random.randint(4,6), 0, rand=True, no_quote=bool(random.getrandbits(1)))
 	quote = ' '.join(quote)
 
 	# first pass reduce the amount of colors
@@ -93,6 +93,9 @@ while True:
 
 	if len(quote) > 80:
 		quote = (quote[:77] + '...')
+
+	if len(quote) == 0:
+		quote = "..."
 
 	status = '"' + quote + '" ' + link + ' #starwarsgif'
 
