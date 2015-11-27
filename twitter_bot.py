@@ -91,8 +91,8 @@ while True:
 	response = twitter.upload_media(media=gif)
 
 
-	if len(quote) > 80:
-		quote = (quote[:77] + '...')
+	if len(quote) > 70:
+		quote = (quote[:67] + '...')
 
 	if len(quote) == 0:
 		quote = "..."
