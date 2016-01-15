@@ -30,7 +30,7 @@ while True:
 	quote = ' '.join(quote)
 
 	# first pass reduce the amount of colors
-	if(os.path.getsize('star_wars.gif') > 4194304):
+	if(os.path.getsize('star_wars.gif') > 5242880):
 		subprocess.call(['convert',
 						'star_wars.gif',
 						'-layers',
@@ -40,7 +40,7 @@ while True:
 						'star_wars.gif'])
 
 	# second pass reduce the amount of colors
-	if(os.path.getsize('star_wars.gif') > 4194304):
+	if(os.path.getsize('star_wars.gif') > 5242880):
 		subprocess.call(['convert',
 						'star_wars.gif',
 						'-layers',
@@ -50,7 +50,7 @@ while True:
 						'star_wars.gif'])
 
 	# other passes reduce the size
-	while(os.path.getsize('star_wars.gif') > 4194304):
+	while(os.path.getsize('star_wars.gif') > 5242880):
 		subprocess.call(['convert',
 						'star_wars.gif',
 						'-resize',
