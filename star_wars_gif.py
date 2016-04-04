@@ -6,11 +6,13 @@ from makeGifs import makeGif
 
 choices = [ { 'name': "Star Wars: A New Hope", 'num': 4 },
 			{ 'name': "Star Wars: The Empire Strikes Back", 'num': 5 },
-			{ 'name': "Star Wars: Return of the Jedi", 'num': 6 } ]
+			{ 'name': "Star Wars: Return of the Jedi", 'num': 6 },
+      { 'name': "Star Wars: The Force Awakens", 'num': 7 }]
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
 				5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
-				6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
+				6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt',
+        7: 'subs/Star.Wars.Episode.VII.The.Force.Awakens.2015.BRRip.XViD.AC3-ETRG.srt'}
 
 source = 0
 index = 0
@@ -53,7 +55,7 @@ def find_quotes(button, edit):
 				return False
 		return True
 	matching = [s for s in subs if seek(search_text, s.text.lower())]
-	
+
 	body_text = "Select quote" if len(matching) > 0 else "No quotes found"
 	body = [urwid.Text(body_text), urwid.Divider()]
 	for m in matching:

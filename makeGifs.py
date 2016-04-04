@@ -13,7 +13,8 @@ import argparse
 
 sub_files = {   4: 'subs/IV-A.New.Hope[1977]DvDrip-aXXo.srt',
 				5: 'subs/V-The.Empire.Strikes.Back[1980]DvDrip-aXXo.srt',
-				6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt' }
+				6: 'subs/VI-Return.Of.The.Jedi[1983]DvDrip-aXXo.srt',
+        7: 'subs/Star.Wars.Episode.VII.The.Force.Awakens.2015.BRRip.XViD.AC3-ETRG.srt'}
 
 def striptags(data):
 	# I'm a bad person, don't ever do this.
@@ -158,8 +159,8 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", f
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--episodes', type=int, metavar="EPISODE", nargs='*', default=[4,5,6],
-						help='episode numbers, space-separated (default: 4 5 6)')
+	parser.add_argument('--episodes', type=int, metavar="EPISODE", nargs='*', default=[4,5,6,7],
+						help='episode numbers, space-separated (default: 4 5 6 7)')
 
 	group = parser.add_mutually_exclusive_group()
 	group.add_argument('--random', dest='index', action='store_false',
