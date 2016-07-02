@@ -148,7 +148,6 @@ def makeGif(source, sub_index, rand=False, no_quote=False, custom_subtitle="", f
 
 	# create a fuckin' gif
 	print "generating gif..."
-	#subprocess.call(["convert", "-loop", "0", "screencaps/*.png", filename])
 	writeGif(filename, images)
 
 	if rand:
