@@ -1,4 +1,4 @@
 urwid
 pysrt
 numpy
-pil
+pillow
