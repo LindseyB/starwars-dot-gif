@@ -3,3 +3,4 @@ pysrt
 numpy
 pillow
 twython
+python-tumblpy
