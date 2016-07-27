@@ -1,4 +1,5 @@
 [general]
+ffmpeg: ffmpeg | avconv | none if using vlc 
 vlc_path: /path/to/vlc
 ep4_path: /path/to/episode_4
 ep5_path: /path/to/episode_5
