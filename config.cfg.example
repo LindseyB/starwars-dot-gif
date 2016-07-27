@@ -1,4 +1,5 @@
 [general]
+ffmpeg: ffmpeg [leave empty to use vlc, or change to avconv for debian]
 vlc_path: /path/to/vlc
 ep4_path: /path/to/episode_4
 ep5_path: /path/to/episode_5
