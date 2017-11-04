@@ -26,8 +26,14 @@ headers = {"Authorization": "Client-ID " + CLIENT_ID}
 url = "https://api.imgur.com/3/upload.json"
 
 while True:
-	quote = makeGif(random.randint(4,7), 0, rand=True, no_quote=bool(random.getrandbits(1)))
-	quote = ' '.join(quote)
+	while True:
+		try:
+			quote = makeGif(random.randint(5,7), 0, rand=True, no_quote=False)
+			quote = ' '.join(quote)
+		except:
+			continue
+		else:
+			break
 
 	# first pass reduce the amount of colors
 	if(os.path.getsize('star_wars.gif') > 5242880):
@@ -37,6 +43,8 @@ while True:
 						'Optimize',
 						'-colors',
 						'128',
+						'-loop',
+						'0',
 						'star_wars.gif'])
 
 	# second pass reduce the amount of colors
@@ -47,6 +55,8 @@ while True:
 						'Optimize',
 						'-colors',
 						'64',
+						'-loop',
+						'0',
 						'star_wars.gif'])
 
 	# other passes reduce the size
@@ -58,6 +68,8 @@ while True:
 						'-coalesce',
 						'-layers',
 						'optimize',
+						'-loop',
+						'0',
 						'star_wars.gif'])
 
 	try:
@@ -72,7 +84,7 @@ while True:
 				'title': 'Star Wars Dot Gif'
 			}
 		)
-	except requests.exceptions.ConnectionError:
+	except (requests.exceptions.ConnectionError, OpenSSL.SSL.SysCallError):
 		# try again.
 		continue
 
@@ -80,9 +92,10 @@ while True:
 	try:
 		res_json = response.json()
 		link = res_json['data']['link']
-	except ValueError:
+	except (KeyError, ValueError):
 		# try again.
 		continue
+	
 
 	twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
@@ -100,7 +113,12 @@ while True:
 	status = '"' + quote + '" ' + link + ' #starwarsgif'
 
 	print "tweeting..."
-	twitter.update_status(status=status, media_ids=[response['media_id']])
+	try:
+		twitter.update_status(status=status, media_ids=[response['media_id']])
+	except:
+		# error with twitter sleep a bit and try again
+		time.sleep(1800)
+		continue
 
 	print "sleeping..."
 	# sleep 1 hour
