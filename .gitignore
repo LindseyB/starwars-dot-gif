@@ -1,8 +1,13 @@
 *.avi
+*.mp4
+*.mkv
 *.png
-__pycache__
+*.gif
 *.pyc
+.env
+.vscode
 .DS_Store
-config.cfg
+__pycache__
 screencaps/
-star_wars.gif
+config.cfg
+pip-selfcheck.json
