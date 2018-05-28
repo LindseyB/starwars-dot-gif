@@ -118,7 +118,7 @@ def drawText(draw, x, y, text, font):
     draw.text((x, y), text, (255, 255, 255), font=font)
 
 
-def makeGif(movie_slug, sub_index=-1, custom_subtitle="", quote=True,
+def makeGif(movie_slug, sub_index=[-1], custom_subtitle=[""], quote=True,
             frames=0, filename="star_wars.gif", dither=DITHER,
             padding=PADDING, palletsize=PALLETSIZE, width=WIDTH, height=HEIGHT,
             frame_duration=FRAME_DURATION, font_path=FONT_PATH,
@@ -136,9 +136,10 @@ def makeGif(movie_slug, sub_index=-1, custom_subtitle="", quote=True,
                               be defined in the config-file.
 
     Keyword Arguments:
-        sub_index {int} -- Index of the subtitle "line" uses (default: {None})
-        custom_subtitle {str} -- Replace the selected quote with your own text
-                                (default: {""})
+        sub_index [{int}] -- List of indexes of the subtitle "lines" to use
+                             (default: {[-1]})
+        custom_subtitle [{str}] -- Replace the selected quote with your own
+                                   text (default: {[""]})
         quote {bool} -- False will export the time-slot between the selected
                         index and next index in the subtitle file.
                         True exports the timespan given by the index
@@ -148,8 +149,8 @@ def makeGif(movie_slug, sub_index=-1, custom_subtitle="", quote=True,
                           (default: {"star_wars.gif"})
         dither {int} -- Every <dither> image is used in the gif (2 means every
                         second exported image is used) (default: {2})
-        padding {list} -- Seconds to add at the end and beginning of the gif
-                          (default: {[0]})
+        padding {[int]} -- Seconds to add at the end and beginning of the gif
+                           (default: {[0]})
         palletsize {int} -- Palletsize, will be rounded to the nearest power
                             of two (default: {256})
         width {int} -- Width of the gif to generate (height does not scale to
@@ -187,172 +188,191 @@ def makeGif(movie_slug, sub_index=-1, custom_subtitle="", quote=True,
     if not os.path.exists(SCREENCAP_PATH):
         os.makedirs(SCREENCAP_PATH)
 
-    # delete the contents of the screencap path
-    file_list = os.listdir(SCREENCAP_PATH)
-    for file_name in file_list:
-        os.remove(os.path.join(SCREENCAP_PATH, file_name))
+    # these are the frames that will be exported
+    images = []
+    meta = []
 
     # read in the quotes for the selected movie
     subs = pysrt.open(movie['subtitle_path'])
     font = ImageFont.truetype(font_path, font_size)
 
-    # get padding from array
-    if isinstance(padding, (int, float)):
-        padding_left = padding
-        padding_right = padding
-    elif len(padding) == 2:
-        padding_left = padding[0]
-        padding_right = padding[1]
-    elif len(padding) == 1:
-        padding_left = padding[0]
-        padding_right = padding[0]
-    else:
-        padding_left = 0
-        padding_right = 0
+    loop = 0
+    for working_index in sub_index:
+        # delete the contents of the screencap path
+        file_list = os.listdir(SCREENCAP_PATH)
+        for file_name in file_list:
+            os.remove(os.path.join(SCREENCAP_PATH, file_name))
 
-    # if no quote selected, set a random one
-    if sub_index < 1:
-        sub_index = random.randint(1, len(subs))
-    if sub_index > len(subs)+1:
-        print('subtitle index not available')
-        exit(1)
-
-    subtitle = subs[sub_index-1]
-    next_subtitle = subs[sub_index]
-
-    # setting text to "subtitle" with
-    if len(custom_subtitle) > 0:
-        text = [custom_subtitle]
-    else:
-        text = striptags(subtitle.text).split("\n")
-
-    print('generating images from video ...')
-
-    # Both ffmpeg and vlc write a lot of stuff to stdout, supressing
-    FNULL = open(os.devnull, 'w')
-
-    if ffmpeg_path:
-        print('using ffmpeg.')
-        # ffmpeg
-        # getting timespans (begin and duration)
-        if quote:
-            start = subtitle.start - pysrt.SubRipTime(
-                0, 0, padding_left)
-            diff = subtitle.end - subtitle.start
+        # see of we have custom quotes
+        if len(custom_subtitle) > loop:
+            working_subtitle = custom_subtitle[loop]
         else:
-            start = subtitle.end - pysrt.SubRipTime(
-                0, 0, padding_left)
-            diff = next_subtitle.start - subtitle.end
+            working_subtitle = ""
 
-        duration = str(diff.seconds +
-                       (diff.milliseconds*0.001) +
-                       padding_right)
-        start = str(start).replace(',', '.')
-
-        # calling ffmpeg (or whatever binary talks in ffmpeg-options)
-        subprocess.call([
-            ffmpeg_path,
-            '-ss',
-            start,
-            '-i',
-            movie['movie_path'],
-            '-t',
-            duration,
-            '-s',
-            '{}x{}'.format(width, height),
-            SCREENCAP_PATH + '/thumb%05d.png'],
-            stdout=FNULL, stderr=subprocess.STDOUT)
-    else:
-        # vlc
-        print('using vlc')
-        # getting timespans
-        if quote:
-            start = ((3600 * subtitle.start.hours) +
-                     (60 * subtitle.start.minutes) +
-                     subtitle.start.seconds -
-                     padding_left +
-                     (0.001*subtitle.start.milliseconds))
-            end = ((3600 * subtitle.end.hours) +
-                   (60 * subtitle.end.minutes) +
-                   subtitle.end.seconds +
-                   padding_right +
-                   (0.001*subtitle.end.milliseconds))
+        # get padding from array
+        if isinstance(padding, (int, float)):
+            padding_left = padding
+            padding_right = padding
+        elif len(padding) == 2:
+            padding_left = padding[0]
+            padding_right = padding[1]
+        elif len(padding) >= (2 * loop + 2):
+            padding_left = padding[2 * loop]
+            padding_right = padding[2 * loop + 1]
+        elif len(padding) >= (2 * loop + 1):
+            padding_left = padding[2 * loop]
+            padding_right = padding[2 * loop]
         else:
-            start = ((3600 * subtitle.end.hours) +
-                     (60 * subtitle.end.minutes) +
-                     subtitle.end.seconds +
-                     (0.001*subtitle.end.milliseconds))
-            end = ((3600 * next_subtitle.start.hours) +
-                   (60 * next_subtitle.start.minutes) +
-                   next_subtitle.start.seconds +
-                   (0.001*next_subtitle.start.milliseconds))
-        # calling vlc
-        subprocess.call([
-            vlc_path,
-            '-Idummy',
-            '--video-filter',
-            'scene',
-            '-Vdummy',
-            '--no-audio',
-            '--scene-height=256',
-            '--scene-width=512',
-            '--scene-format=png',
-            '--scene-ratio=1',
-            '--start-time='+str(start),
-            '--stop-time='+str(end),
-            '--scene-prefix=thumb',
-            '--scene-path='+SCREENCAP_PATH,
-            movie['movie_path'],
-            'vlc://quit'
-        ], stdout=FNULL, stderr=subprocess.STDOUT)
+            # this should not happen
+            padding_left = 0
+            padding_right = 0
 
-    # Generating images done
-    file_names = sorted((fn for fn in os.listdir(SCREENCAP_PATH)))
-    if not file_names:
-        print('no images generated, aborting.')
-        return
-    print('generated {} images.'.format(len(file_names)))
+        # if no quote selected, set a random one
+        if working_index < 1:
+            working_index = random.randint(1, len(subs))
+        if working_index > len(subs)+1:
+            print('subtitle index not available')
+            exit(1)
 
-    images = []
-    for f in file_names[::dither]:
-        try:
-            image = Image.open(os.path.join(SCREENCAP_PATH, f))
-            draw = ImageDraw.Draw(image)
-            image_size = image.size
+        subtitle = subs[working_index-1]
+        next_subtitle = subs[working_index]
 
-            # deal with multi-line quotes
-            try:
-                if len(text) == 2:
-                    # at most 2?
-                    text_size = font.getsize(text[0])
-                    x = (image_size[0]/2) - (text_size[0]/2)
-                    y = image_size[1] - (2*text_size[1]) - 8  # padding
-                    drawText(draw, x, y, text[0], font)
+        # setting text to "subtitle" with
+        if len(working_subtitle) > 0:
+            text = [working_subtitle]
+        else:
+            text = striptags(subtitle.text).split("\n")
 
-                    text_size = font.getsize(text[1])
-                    x = (image_size[0]/2) - (text_size[0]/2)
-                    y += text_size[1]
-                    drawText(draw, x, y, text[1], font)
-                else:
-                    text_size = font.getsize(text[0])
-                    x = (image_size[0]/2) - (text_size[0]/2)
-                    y = image_size[1] - text_size[1] - 8  # padding
-                    drawText(draw, x, y, text[0], font)
-            except NameError:
-                pass
-            # do nothing.
+        print('generating images from video ...')
 
-            # if not all black?
-            if image.getbbox():
-                # add it to the array
-                images.append(array(image))
-                if frames != 0 and len(images) == frames:
-                    # got all the frames we need - all done
-                    break
+        # Both ffmpeg and vlc write a lot of stuff to stdout, supressing
+        FNULL = open(os.devnull, 'w')
+
+        if ffmpeg_path:
+            print('using ffmpeg.')
+            # ffmpeg
+            # getting timespans (begin and duration)
+            if quote:
+                start = subtitle.start - pysrt.SubRipTime(
+                    0, 0, padding_left)
+                diff = subtitle.end - subtitle.start
             else:
-                print('all black frame found.')
-        except IOError:
-            print('empty frame found.')
+                start = subtitle.end - pysrt.SubRipTime(
+                    0, 0, padding_left)
+                diff = next_subtitle.start - subtitle.end
+
+            duration = str(diff.seconds +
+                        (diff.milliseconds*0.001) +
+                        padding_right)
+            start = str(start).replace(',', '.')
+
+            # calling ffmpeg (or whatever binary talks in ffmpeg-options)
+            subprocess.call([
+                ffmpeg_path,
+                '-ss',
+                start,
+                '-i',
+                movie['movie_path'],
+                '-t',
+                duration,
+                '-s',
+                '{}x{}'.format(width, height),
+                SCREENCAP_PATH + '/thumb%05d.png'],
+                stdout=FNULL, stderr=subprocess.STDOUT)
+        else:
+            # vlc
+            print('using vlc')
+            # getting timespans
+            if quote:
+                start = ((3600 * subtitle.start.hours) +
+                        (60 * subtitle.start.minutes) +
+                        subtitle.start.seconds -
+                        padding_left +
+                        (0.001*subtitle.start.milliseconds))
+                end = ((3600 * subtitle.end.hours) +
+                    (60 * subtitle.end.minutes) +
+                    subtitle.end.seconds +
+                    padding_right +
+                    (0.001*subtitle.end.milliseconds))
+            else:
+                start = ((3600 * subtitle.end.hours) +
+                        (60 * subtitle.end.minutes) +
+                        subtitle.end.seconds +
+                        (0.001*subtitle.end.milliseconds))
+                end = ((3600 * next_subtitle.start.hours) +
+                    (60 * next_subtitle.start.minutes) +
+                    next_subtitle.start.seconds +
+                    (0.001*next_subtitle.start.milliseconds))
+            # calling vlc
+            subprocess.call([
+                vlc_path,
+                '-Idummy',
+                '--video-filter',
+                'scene',
+                '-Vdummy',
+                '--no-audio',
+                '--scene-height=256',
+                '--scene-width=512',
+                '--scene-format=png',
+                '--scene-ratio=1',
+                '--start-time='+str(start),
+                '--stop-time='+str(end),
+                '--scene-prefix=thumb',
+                '--scene-path='+SCREENCAP_PATH,
+                movie['movie_path'],
+                'vlc://quit'
+            ], stdout=FNULL, stderr=subprocess.STDOUT)
+
+        # Generating images done
+        file_names = sorted((fn for fn in os.listdir(SCREENCAP_PATH)))
+        if not file_names:
+            print('no images generated, aborting.')
+            return
+        print('generated {} images.'.format(len(file_names)))
+
+        for f in file_names[::dither]:
+            try:
+                image = Image.open(os.path.join(SCREENCAP_PATH, f))
+                draw = ImageDraw.Draw(image)
+                image_size = image.size
+
+                # deal with multi-line quotes
+                try:
+                    if len(text) == 2:
+                        # at most 2?
+                        text_size = font.getsize(text[0])
+                        x = (image_size[0]/2) - (text_size[0]/2)
+                        y = image_size[1] - (2*text_size[1]) - 8  # padding
+                        drawText(draw, x, y, text[0], font)
+
+                        text_size = font.getsize(text[1])
+                        x = (image_size[0]/2) - (text_size[0]/2)
+                        y += text_size[1]
+                        drawText(draw, x, y, text[1], font)
+                    else:
+                        text_size = font.getsize(text[0])
+                        x = (image_size[0]/2) - (text_size[0]/2)
+                        y = image_size[1] - text_size[1] - 8  # padding
+                        drawText(draw, x, y, text[0], font)
+                except NameError:
+                    pass
+                # do nothing.
+
+                # if not all black?
+                if image.getbbox():
+                    # add it to the array
+                    images.append(array(image))
+                    if frames != 0 and len(images) == frames:
+                        # got all the frames we need - all done
+                        break
+                else:
+                    print('all black frame found.')
+            except IOError:
+                print('empty frame found.')
+        meta.append('{}: "{}" (index {}, {})'.format(
+            movie['title'], '\n'.join(text), working_index, subtitle.start))
+        # this is so we can have multiple quotes and paddings and stuff
+        loop += 1
 
     # create a fuckin' gif
     print('selected {} images.'.format(len(images)))
@@ -363,8 +383,7 @@ def makeGif(movie_slug, sub_index=-1, custom_subtitle="", quote=True,
                     duration=frame_duration,
                     subrectangles=False)
     print('generated gif.')
-    print('{}: "{}" (index {})'.format(
-        movie['title'], '\n'.join(text), sub_index))
+    print('Used:\n{}'.format('\n'.join(meta)))
     print('done.')
     return text
 
@@ -383,11 +402,11 @@ if __name__ == '__main__':
         )))
 
     parser.add_argument(
-        '--index', dest='index', type=int, nargs='?', default=-1,
+        '--index', dest='index', type=int, nargs='*', default=[-1],
         help='subtitle index (starts at 1)')
 
     parser.add_argument(
-        '--subtitle', dest='subtitle', type=str, nargs='?', default="",
+        '--subtitle', dest='subtitle', type=str, nargs='*', default=[""],
         help='custom subtitle which will replace the actual subtitle')
 
     parser.add_argument(
@@ -455,15 +474,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     CONFIG_FILE = args.config
 
-    if len(args.padding) > 2:
-        arg_padding = args.padding[:2]
-    else:
-        arg_padding = args.padding
-
     # by default we create a random gif
     makeGif(random.choice(args.movie), sub_index=args.index, quote=args.quote,
             filename=args.filename, frames=args.frames,
-            padding=arg_padding, dither=args.dither,
+            padding=args.padding, dither=args.dither,
             width=args.width, height=args.height, palletsize=args.palletsize,
             frame_duration=args.frame_duration, custom_subtitle=args.subtitle,
             font_path=args.font_path, font_size=args.font_size,)
