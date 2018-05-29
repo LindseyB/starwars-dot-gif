@@ -145,4 +145,4 @@ top = urwid.Overlay(main, urwid.SolidFill(
     min_width=20, min_height=9)
 urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
 if index:
-    makeGif(selected_movie['slug'], index, custom_subtitle=subtitle)
+    makeGif(selected_movie['slug'], [index], custom_subtitle=[subtitle])
