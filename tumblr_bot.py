@@ -5,7 +5,7 @@ import time
 import subprocess
 
 from tumblpy import Tumblpy
-from makeGifs import makeGif, check_config
+from make_gifs import make_gif, check_config
 
 config = ConfigParser.ConfigParser()
 config.read("config.cfg")
@@ -26,8 +26,8 @@ t = Tumblpy(
 )
 
 while True:
-    # you can set many more options, check the makeGif-function
-    quote = makeGif(random.choice(slugs), frames=20)
+    # you can set many more options, check the make_gif-function
+    quote = make_gif(random.choice(slugs), frames=20)
     quote = ' '.join(quote)
 
     # reduce amount of colors, because tumblr sucks
