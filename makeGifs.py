@@ -45,9 +45,7 @@ def check_config(config_file):
         print('Option missing from config-file: {}'.format(ex.message))
         exit(1)
     except SyntaxError as err:
-        items = err[1]
-        print('{}: {} on line {}, character {} in {}'.format(
-            err[0].capitalize(), items[0], items[1], items[2], config_file))
+        print(f"{err.text}: on line {err.lineno}, character {err.offset} in {err.filename}")
         print('This might be wrong syntax in the videos-setting')
         exit(1)
     slugs = [movie['slug'] for movie in movies]

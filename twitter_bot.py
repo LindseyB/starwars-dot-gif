@@ -113,7 +113,7 @@ while True:
 
     status = '"' + quote + '" ' + link + ' #starwarsgif'
 
-    print "tweeting..."
+    print("tweeting...")
     try:
         twitter.update_status(status=status, media_ids=[response['media_id']])
     except:
@@ -121,6 +121,6 @@ while True:
         time.sleep(1800)
         continue
 
-    print "sleeping..."
+    print("sleeping...")
     # sleep 1 hour
     time.sleep(3600)

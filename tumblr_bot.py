@@ -27,7 +27,7 @@ t = Tumblpy(
 
 while True:
     # you can set many more options, check the makeGif-function
-    quote = makeGif(random.choice(slug), frames=20)
+    quote = makeGif(random.choice(slugs), frames=20)
     quote = ' '.join(quote)
 
     # reduce amount of colors, because tumblr sucks
@@ -65,6 +65,6 @@ while True:
             'tags': 'star wars, gif'}
     )
 
-    print "sleeping..."
+    print("sleeping...")
     # sleep 12 hours
     time.sleep(43200)
