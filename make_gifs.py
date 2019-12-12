@@ -45,9 +45,7 @@ def check_config(config_file):
         print('Option missing from config-file: {}'.format(ex.message))
         exit(1)
     except SyntaxError as err:
-        items = err[1]
-        print('{}: {} on line {}, character {} in {}'.format(
-            err[0].capitalize(), items[0], items[1], items[2], config_file))
+        print(f"{err.text}: on line {err.lineno}, character {err.offset} in {err.filename}")
         print('This might be wrong syntax in the videos-setting')
         exit(1)
     slugs = [movie['slug'] for movie in movies]
@@ -97,7 +95,7 @@ def striptags(data):
     return p.sub('', data)
 
 
-def drawText(draw, x, y, text, font):
+def draw_text(draw, x, y, text, font):
     """Draws a white text with a black outline.
 
     Arguments:
@@ -118,7 +116,7 @@ def drawText(draw, x, y, text, font):
     draw.text((x, y), text, (255, 255, 255), font=font)
 
 
-def makeGif(movie_slug, sub_index=[-1], custom_subtitle=[""], quote=True,
+def make_gif(movie_slug, sub_index=[-1], custom_subtitle=[""], quote=True,
             frames=0, filename="star_wars.gif", dither=DITHER,
             padding=PADDING, palletsize=PALLETSIZE, width=WIDTH, height=HEIGHT,
             frame_duration=FRAME_DURATION, font_path=FONT_PATH,
@@ -343,17 +341,17 @@ def makeGif(movie_slug, sub_index=[-1], custom_subtitle=[""], quote=True,
                         text_size = font.getsize(text[0])
                         x = (image_size[0]/2) - (text_size[0]/2)
                         y = image_size[1] - (2*text_size[1]) - 8  # padding
-                        drawText(draw, x, y, text[0], font)
+                        draw_text(draw, x, y, text[0], font)
 
                         text_size = font.getsize(text[1])
                         x = (image_size[0]/2) - (text_size[0]/2)
                         y += text_size[1]
-                        drawText(draw, x, y, text[1], font)
+                        draw_text(draw, x, y, text[1], font)
                     else:
                         text_size = font.getsize(text[0])
                         x = (image_size[0]/2) - (text_size[0]/2)
                         y = image_size[1] - text_size[1] - 8  # padding
-                        drawText(draw, x, y, text[0], font)
+                        draw_text(draw, x, y, text[0], font)
                 except NameError:
                     pass
                 # do nothing.
@@ -475,7 +473,7 @@ if __name__ == '__main__':
     CONFIG_FILE = args.config
 
     # by default we create a random gif
-    makeGif(random.choice(args.movie), sub_index=args.index, quote=args.quote,
+    make_gif(random.choice(args.movie), sub_index=args.index, quote=args.quote,
             filename=args.filename, frames=args.frames,
             padding=args.padding, dither=args.dither,
             width=args.width, height=args.height, palletsize=args.palletsize,

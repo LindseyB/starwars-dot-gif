@@ -4,7 +4,7 @@ import ast
 import configparser
 import pysrt
 import urwid
-from makeGifs import makeGif, check_config
+from make_gifs import make_gif, check_config
 
 config = configparser.ConfigParser()
 config.read("config.cfg")
@@ -145,4 +145,4 @@ top = urwid.Overlay(main, urwid.SolidFill(
     min_width=20, min_height=9)
 urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
 if index:
-    makeGif(selected_movie['slug'], [index], custom_subtitle=[subtitle])
+    make_gif(selected_movie['slug'], [index], custom_subtitle=[subtitle])

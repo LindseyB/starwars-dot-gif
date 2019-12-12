@@ -8,6 +8,7 @@
 .vscode
 .DS_Store
 __pycache__
+env/
 screencaps/
 config.cfg
 pip-selfcheck.json

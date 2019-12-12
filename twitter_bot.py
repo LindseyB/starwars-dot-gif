@@ -1,18 +1,19 @@
 import base64
 import json
 import requests
-import ConfigParser
+import configparser
 import random
 import os
 import time
 import subprocess
 
+import OpenSSL
 from twython import Twython
 from base64 import b64encode
-from makeGifs import makeGif, check_config
+from make_gifs import make_gif, check_config
 
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read("config.cfg")
 config.sections()
 slugs = check_config("config.cfg")[3]
@@ -30,8 +31,8 @@ url = "https://api.imgur.com/3/upload.json"
 while True:
     while True:
         try:
-            # you can set many more options, check the makeGif-function
-            quote = makeGif(random.choice(slugs))
+            # you can set many more options, check the make_gif-function
+            quote = make_gif(random.choice(slugs))
             quote = ' '.join(quote)
         except:
             print('something went wrong during gif-generation')
@@ -113,7 +114,7 @@ while True:
 
     status = '"' + quote + '" ' + link + ' #starwarsgif'
 
-    print "tweeting..."
+    print("tweeting...")
     try:
         twitter.update_status(status=status, media_ids=[response['media_id']])
     except:
@@ -121,6 +122,6 @@ while True:
         time.sleep(1800)
         continue
 
-    print "sleeping..."
+    print("sleeping...")
     # sleep 1 hour
     time.sleep(3600)
