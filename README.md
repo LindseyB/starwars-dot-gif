@@ -34,19 +34,19 @@ python star_wars_gif.py
 #### To get a random gif
 
 ```bash
-python makeGifs.py
+python make_gifs.py
 ```
 
 ### Embedding in another python-script
 
-If you want to use ```makeGifs``` elsewhere use:
+If you want to use ```make_gifs``` elsewhere use:
 
 ```python
-from makeGifs import makeGif
+from make_gifs import make_gif
 # source should be a slug from config.cfg
 # index is the index of the quote in the SRT
-# for more options see makeGifs.py
-makeGif(source, index)
+# for more options see make_gifs.py
+make_gif(source, index)
 ```
 
 ### Running the twitter bot
@@ -60,7 +60,7 @@ The bot will tweet once every hour.
 ### Notes
 
 - if you know what a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/) is, we recommend you use one
-- for more options on creating gifs, please read the [embbeded documentation](makeGifs.py)
+- for more options on creating gifs, please read the [embbeded documentation](make_gifs.py)
 
 ## In detail
 
@@ -97,8 +97,8 @@ The repository currently includes subtitles for Star Wars episode IV to VIII, yo
 To test the configuration you may run the script with the ```--help```-option, which will give you an extensive explanation of options.
 
 ```bash
-(.env)$ python makeGifs.py --help
-usage: makeGifs.py [-h] [--movie [MOVIE [MOVIE ...]]] [--index [INDEX]]
+(.env)$ python make_gifs.py --help
+usage: make_gifs.py [-h] [--movie [MOVIE [MOVIE ...]]] [--index [INDEX]]
 ...
 ```
 
@@ -123,13 +123,13 @@ The direct method can be called from the commandline or from another python scri
 The following command will create a gif with the quote "Aren't you a little short for a stormtrooper?".
 
 ```bash
-(.env)$ python makeGif.py --movie hope --index 848
+(.env)$ python make_gifs.py --movie hope --index 848
 ```
 
 Now adding some options:
 
 ```bash
-(.env)$ python makeGifs.py --movie hope --index 848 --padding 0 0.6 --subtitle "I have been expecting you"
+(.env)$ python make_gifs.py --movie hope --index 848 --padding 0 0.6 --subtitle "I have been expecting you"
 ```
 
 This added 0.6 seconds (and a confused Luke) to the end of the gif and changed the rendered subtitle to "I have been expecting you". As previously mentioned there are many more options available.
@@ -137,11 +137,11 @@ This added 0.6 seconds (and a confused Luke) to the end of the gif and changed t
 When called from python usage follows a general pattern:
 
 ```python
-from makeGifs import makeGif
+from make_gifs import make_gif
 # source should be a slug from config.cfg
 # index is the index of the SRT
-# for more options see makeGif.py
-makeGif('hope', 848, padding=[0, 0.6], custom_subtitle="I have been expecting you", filename="say_what.gif")
+# for more options see make_gifs.py
+make_gif('hope', 848, padding=[0, 0.6], custom_subtitle="I have been expecting you", filename="say_what.gif")
 ```
 
 This example will reproduce the above shell example and save it as "say_what.gif". Feel free to try this example in [ipython](http://ipython.readthedocs.io/en/stable/).
